@@ -1,0 +1,60 @@
+version: "3.7"
+
+x-apache-airflow-base: &apache-airflow-base
+  image: apache/airflow:1.10.10
+  environment:
+    AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres:5432/airflow
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    AIRFLOW__CORE__FERNET_KEY: FB0o_zt4e3Ziq3LdUUO7F2Z95cvFFx16hU8jTeR1ASM=
+    AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+  volumes:
+    - ./dags:/opt/airflow/dags
+  depends_on:
+    - postgres
+    - redis
+    - localstack
+
+services:
+  postgres:
+    image: postgres:11.5
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - /var/lib/postgresql/data/pgdata
+
+  redis:
+    image: redis:5
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+  localstack:
+    image: localstack/localstack-light
+    environment:
+      SERVICES: s3
+      DEFAULT_REGION: eu-west-2
+
+  webserver:
+    <<: *apache-airflow-base
+    command: webserver
+    ports:
+      - 8080:8080
+
+  flower:
+    <<: *apache-airflow-base
+    command: flower
+    ports:
+      - 5555:5555
+
+  scheduler:
+    <<: *apache-airflow-base
+    command: scheduler
+
+  worker:
+    <<: *apache-airflow-base
+    command: worker
