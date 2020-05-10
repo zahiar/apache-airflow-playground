@@ -1,6 +1,7 @@
-# Example: Run Airflow with Celery via docker-compose
+# Example: Develop against LocalStack
 
-This example shows you how to run Airflow (using official docker image) with its dependencies using docker-compose.
+This example shows you how to you can use LocalStack to develop your AWS-dependent DAGs locally, without requiring
+actual AWS resources.
 
 ## Instructions
 
