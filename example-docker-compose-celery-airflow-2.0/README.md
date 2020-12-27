@@ -2,7 +2,7 @@
 
 This example shows you how to run Airflow 2.0 (using official docker image) with its dependencies using docker-compose.
 
-Please note that Airflow 2.0 is in **development** (at time of writing), and will contain backwards incompatible changes,
+Please note that Airflow 2.0 will contain backwards incompatible changes,
 for example, I found the following airflow CLI changes:
 
 | Old Commands | New Commands  |

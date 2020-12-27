@@ -1,7 +1,7 @@
 version: "3.7"
 
 x-apache-airflow-base: &apache-airflow-base
-  image: apache/airflow:master
+  image: apache/airflow:2.0.0-python3.8
   environment:
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
